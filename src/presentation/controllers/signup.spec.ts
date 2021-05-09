@@ -8,17 +8,8 @@ interface SutTypes {
 }
 
 /**
- * Factories
+ * Factory helpers
  */
-
-const makeEmailValidatorWithError = (): EmailValiddator => {
-  class EmailValidatorStub implements EmailValiddator {
-    isValid (email: string): boolean {
-      throw new Error()
-    }
-  }
-  return new EmailValidatorStub()
-}
 
 const makeEmailValidator = (): EmailValiddator => {
   class EmailValidatorStub implements EmailValiddator {
@@ -138,8 +129,11 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 500 if  email validator throws exception', () => {
-    const emailValidatorStub = makeEmailValidatorWithError()
-    const sut = new SignUpController(emailValidatorStub)
+    const { sut, emailValidatorStub } = makeSut()
+
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
 
     const httpRequest = {
       body: {
