@@ -1,16 +1,13 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamError, ServerError } from '../errors'
-import { EmailValiddator } from '../protocols'
-
-import { AccountModel } from '../../domain/models/account'
-import { AddAccount, AddAccountModel } from '../../domain/usecases/add-account'
+import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
+import { EmailValidator, AccountModel, AddAccount, AddAccountModel } from './signup-protocols'
 
 /**
  * Factory helpers
  */
 
-const makeEmailValidator = (): EmailValiddator => {
-  class EmailValidatorStub implements EmailValiddator {
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
       return true
     }
@@ -35,7 +32,7 @@ const makeAddAccount = (): AddAccount => {
 
 interface SutTypes {
   sut: SignUpController
-  emailValidatorStub: EmailValiddator
+  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
 }
 
